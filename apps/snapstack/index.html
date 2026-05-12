@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トルツミー — 撮って、積もう。</title>
+<meta name="description" content="身の回りのモノを撮って積む、新感覚の物理パズル。Snap Stack - Stack anything around you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --ink-soft: #555;
+    --ink-mute: #888;
+    --bg: #f5f1ec;
+    --bg-soft: #ebe5dd;
+    --pop-pink: #ff6b9d;
+    --pop-yellow: #ffb800;
+    --pop-green: #5db35d;
+    --pop-blue: #87ceeb;
+    --pop-red: #ff3b30;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; }
+  body {
+    font-family: 'Plus Jakarta Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+
+  /* === Sky background === */
+  .sky-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 0%, #b8e0f2 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 15%, #ffd5e5 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 70%, #fff4c7 0%, transparent 60%),
+      linear-gradient(180deg, #e8f4fb 0%, var(--bg) 60%);
+  }
+
+  /* === Clouds === */
+  .cloud {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 100px;
+    filter: blur(2px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .cloud-1 { width: 200px; height: 60px; top: 12%; left: 5%; }
+  .cloud-2 { width: 160px; height: 50px; top: 25%; right: 6%; }
+  .cloud-3 { width: 240px; height: 70px; top: 55%; left: 8%; }
+  .cloud-4 { width: 180px; height: 55px; top: 75%; right: 12%; }
+
+  /* === Nav === */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(245, 241, 236, 0.6);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  nav .logo {
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  nav .logo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: url('icon.png') center/cover no-repeat;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  nav .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .lang-toggle {
+    display: flex;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 999px;
+    padding: 3px;
+    backdrop-filter: blur(10px);
+  }
+  .lang-toggle button {
+    background: none;
+    border: none;
+    padding: 6px 14px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    color: var(--ink-soft);
+    border-radius: 999px;
+    transition: all 0.2s;
+  }
+  .lang-toggle button.active {
+    background: var(--ink);
+    color: #fff;
+  }
+  nav .nav-cta {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    color: var(--ink);
+    padding: 10px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: all 0.2s;
+  }
+  nav .nav-cta:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  /* === Hero === */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 60px;
+    padding: 140px 80px 80px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-content { position: relative; z-index: 2; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    color: var(--ink);
+  }
+  .badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--pop-pink);
+    box-shadow: 0 0 12px var(--pop-pink);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.2); }
+  }
+
+  h1.hero-title {
+    font-size: clamp(56px, 8vw, 130px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    margin-bottom: 28px;
+    color: var(--ink);
+  }
+  h1.hero-title .pop {
+    background: linear-gradient(135deg, var(--pop-pink) 0%, var(--pop-yellow) 50%, var(--pop-green) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-style: italic;
+    display: inline-block;
+    padding-right: 0.1em;
+  }
+
+  .tagline {
+    font-size: clamp(16px, 1.5vw, 20px);
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .cta-group {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: #fff;
+    padding: 17px 30px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.2s;
+    box-shadow: 0 12px 32px rgba(10, 10, 10, 0.2);
+  }
+  .cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(10, 10, 10, 0.28);
+  }
+  .cta-primary svg { width: 20px; height: 20px; }
+  .cta-meta {
+    font-size: 13px;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+  .cta-meta strong { color: var(--ink); }
+
+  /* Hero phone */
+  .hero-phone {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .phone-frame {
+    width: 320px;
+    border-radius: 40px;
+    overflow: hidden;
+    transform: rotate(-3deg);
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.25));
+  }
+  .phone-frame:hover { transform: rotate(-1deg) scale(1.02); }
+  .phone-frame img,
+  .phone-frame video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Decorative dots */
+  .deco {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: float 6s ease-in-out infinite;
+  }
+  .deco-1 { width: 30px; height: 30px; background: var(--pop-pink); top: 5%; left: -20px; opacity: 0.6; animation-delay: 0s; }
+  .deco-2 { width: 50px; height: 50px; background: var(--pop-yellow); top: 60%; right: -25px; opacity: 0.5; animation-delay: 1s; }
+  .deco-3 { width: 20px; height: 20px; background: var(--pop-green); bottom: 8%; left: -10px; opacity: 0.7; animation-delay: 2s; }
+  .deco-4 { width: 14px; height: 14px; background: var(--pop-blue); top: 30%; right: 20px; opacity: 0.7; animation-delay: 3s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .stat-num {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* === Section === */
+  section.block {
+    padding: 120px 80px;
+    position: relative;
+    z-index: 1;
+  }
+  .section-head {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+  .section-label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pop-red);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 540px;
+    margin: 0 auto;
+    font-weight: 500;
+  }
+
+  /* === Screenshots === */
+  .ss-section {
+    background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.4) 100%);
+  }
+  .ss-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .ss-item {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .ss-item:nth-child(1) { transform: rotate(-2deg) translateY(20px); }
+  .ss-item:nth-child(2) { transform: rotate(1deg) translateY(-10px); }
+  .ss-item:nth-child(3) { transform: rotate(2.5deg) translateY(15px); }
+  .ss-item:hover {
+    transform: rotate(0) translateY(-8px) scale(1.03);
+    z-index: 2;
+    position: relative;
+  }
+  .ss-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.18));
+  }
+
+  /* === Features === */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .feat-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 32px;
+    transition: all 0.3s;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .feat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 0 0 100% 0;
+    opacity: 0.15;
+  }
+  .feat-card:nth-child(1)::before { background: var(--pop-pink); }
+  .feat-card:nth-child(2)::before { background: var(--pop-yellow); }
+  .feat-card:nth-child(3)::before { background: var(--pop-green); }
+  .feat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+  }
+  .feat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .feat-card:nth-child(1) .feat-icon { background: linear-gradient(135deg, #ffd5e5, #ff6b9d); }
+  .feat-card:nth-child(2) .feat-icon { background: linear-gradient(135deg, #fff4c7, #ffb800); }
+  .feat-card:nth-child(3) .feat-icon { background: linear-gradient(135deg, #d5edd5, #5db35d); }
+  .feat-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .feat-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  /* === Bottom CTA === */
+  .bottom-cta {
+    text-align: center;
+    padding: 140px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bottom-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 50%, var(--pop-pink) 0%, transparent 30%),
+      radial-gradient(circle at 70% 50%, var(--pop-yellow) 0%, transparent 30%);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  .bottom-cta-content {
+    position: relative;
+    z-index: 1;
+  }
+  .bottom-cta h2 {
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .bottom-cta h2 .pop {
+    background: linear-gradient(135deg, var(--pop-pink) 0%, var(--pop-yellow) 50%, var(--pop-green) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-style: italic;
+  }
+  .bottom-cta p {
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .bottom-cta .cta-primary {
+    font-size: 17px;
+    padding: 20px 36px;
+  }
+
+  /* === Footer === */
+  footer {
+    padding: 60px 48px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.5);
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .footer-brand {
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .footer-brand .logo-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: url('icon.png') center/cover no-repeat;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--ink-mute);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  /* === Language switching === */
+  [data-show-lang] { display: none; }
+  body[data-lang="ja"] [data-show-lang="ja"] { display: revert; }
+  body[data-lang="en"] [data-show-lang="en"] { display: revert; }
+  body[data-lang="ja"] .ss-en, body[data-lang="en"] .ss-ja { display: none; }
+
+  /* === Responsive === */
+  @media (max-width: 900px) {
+    nav { padding: 16px 20px; }
+    nav .nav-cta { display: none; }
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 120px 24px 60px;
+      text-align: center;
+      gap: 50px;
+    }
+    .hero-content { order: 2; }
+    .hero-phone { order: 1; }
+    .badge { margin-left: auto; margin-right: auto; }
+    .phone-frame { width: 260px; }
+    .cta-group { justify-content: center; }
+    .stats { justify-content: center; }
+    section.block { padding: 80px 24px; }
+    .ss-grid { grid-template-columns: 1fr; gap: 40px; }
+    .ss-item:nth-child(n) { transform: rotate(0); }
+    .feat-grid { grid-template-columns: 1fr; }
+    .footer-inner { flex-direction: column; text-align: center; }
+  }
+
+  /* === Hero load animation === */
+  .hero-content > * { animation: fadeUp 0.8s ease backwards; }
+  .hero-content .badge { animation-delay: 0.1s; }
+  .hero-content h1 { animation-delay: 0.2s; }
+  .hero-content .tagline { animation-delay: 0.35s; }
+  .hero-content .cta-group { animation-delay: 0.5s; }
+  .hero-content .stats { animation-delay: 0.65s; }
+  .hero-phone { animation: fadeUp 1s ease 0.3s backwards; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky-bg"></div>
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+<div class="cloud cloud-4"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="logo">
+    <span class="logo-icon"></span>
+    <span data-show-lang="ja">トルツミー</span>
+    <span data-show-lang="en">Snap Stack</span>
+  </div>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button data-lang-btn="ja" class="active">JA</button>
+      <button data-lang-btn="en">EN</button>
+    </div>
+    <a href="#download" class="nav-cta">
+      <span data-show-lang="ja">入手</span>
+      <span data-show-lang="en">Download</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="badge">
+      <span data-show-lang="ja">NEW</span>
+      <span data-show-lang="en">NEW</span>
+    </div>
+    <h1 class="hero-title">
+      <span data-show-lang="ja">撮って、<br><span class="pop">積もう。</span></span>
+      <span data-show-lang="en">Snap it.<br><span class="pop">Stack it.</span></span>
+    </h1>
+    <p class="tagline">
+      <span data-show-lang="ja">身の回りのモノを写真に撮って、積み上げる新感覚の物理パズル。あなたの世界で、どこまで高く積めますか？</span>
+      <span data-show-lang="en">A new kind of physics puzzle. Take a photo of anything around you, and stack it. How high can you go?</span>
+    </p>
+    <div class="cta-group">
+      <a href="https://apps.apple.com/app/id6766160511" class="cta-primary" id="appstore-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.41-1.09-.47-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.41C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+        <span data-show-lang="ja">App Storeで入手</span>
+        <span data-show-lang="en">Download on App Store</span>
+      </a>
+      <div class="cta-meta">
+        <span data-show-lang="ja"><strong>無料</strong>でダウンロード</span>
+        <span data-show-lang="en"><strong>Free</strong> to download</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div>
+        <div class="stat-num">3D</div>
+        <div class="stat-label" data-show-lang="ja">物理エンジン</div>
+        <div class="stat-label" data-show-lang="en">Physics</div>
+      </div>
+      <div>
+        <div class="stat-num">∞</div>
+        <div class="stat-label" data-show-lang="ja">遊び方</div>
+        <div class="stat-label" data-show-lang="en">Ways to play</div>
+      </div>
+      <div>
+        <div class="stat-num">📷</div>
+        <div class="stat-label" data-show-lang="ja">写真切り抜き</div>
+        <div class="stat-label" data-show-lang="en">Photo cutout</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-phone">
+    <div class="deco deco-1"></div>
+    <div class="deco deco-2"></div>
+    <div class="deco deco-3"></div>
+    <div class="deco deco-4"></div>
+    <div class="phone-frame">
+      <video autoplay muted loop playsinline preload="metadata" id="hero-video">
+        <source src="ja.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- Screenshots -->
+<section class="block ss-section">
+  <div class="section-head">
+    <span class="section-label" data-show-lang="ja">スクリーンショット</span>
+    <span class="section-label" data-show-lang="en">SCREENSHOTS</span>
+    <h2 class="section-title">
+      <span data-show-lang="ja">こんな感じで遊びます</span>
+      <span data-show-lang="en">See it in action</span>
+    </h2>
+    <p class="section-sub">
+      <span data-show-lang="ja">ぬいぐるみも、雑貨も、ペットも、自撮りも。あなたの周りにあるもの全部が積み木に。</span>
+      <span data-show-lang="en">Plushies, everyday objects, your pet, even a selfie — anything around you becomes a block.</span>
+    </p>
+  </div>
+
+  <div class="ss-grid ss-ja">
+    <div class="ss-item"><img src="ja-1.png" alt="どこまで積める？"></div>
+    <div class="ss-item"><img src="ja-2.png" alt="周りにあるものなんでも積める"></div>
+    <div class="ss-item"><img src="ja-3.png" alt="あなたの写真が積み上がる"></div>
+  </div>
+
+  <div class="ss-grid ss-en">
+    <div class="ss-item"><img src="en-1.png" alt="How High Can You Go?"></div>
+    <div class="ss-item"><img src="en-2.png" alt="Stack Anything Around You"></div>
+    <div class="ss-item"><img src="en-3.png" alt="Your Photos Stack Up"></div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="block">
+  <div class="section-head">
+    <span class="section-label" data-show-lang="ja">特徴</span>
+    <span class="section-label" data-show-lang="en">FEATURES</span>
+    <h2 class="section-title">
+      <span data-show-lang="ja">3つの、しかけ。</span>
+      <span data-show-lang="en">Three things to love.</span>
+    </h2>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">📸</div>
+      <h3 class="feat-title">
+        <span data-show-lang="ja">撮って、切り抜く</span>
+        <span data-show-lang="en">Snap & cut out</span>
+      </h3>
+      <p class="feat-text">
+        <span data-show-lang="ja">カメラで撮った写真や、フォトライブラリの画像から、被写体を自動で切り抜いて積み木にできます。ぬいぐるみも、雑貨も、自撮りだって。</span>
+        <span data-show-lang="en">Take a photo or pick from your library — the subject gets cut out automatically. Plushies, objects, even your own selfie.</span>
+      </p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">⚡</div>
+      <h3 class="feat-title">
+        <span data-show-lang="ja">本格的な物理エンジン</span>
+        <span data-show-lang="en">Real physics</span>
+      </h3>
+      <p class="feat-text">
+        <span data-show-lang="ja">重さ、バランス、揺れ。シンプルな見た目に反して、本物のように振る舞う物理シミュレーション。</span>
+        <span data-show-lang="en">Weight, balance, sway. Behind the simple look, everything behaves like the real world.</span>
+      </p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🎯</div>
+      <h3 class="feat-title">
+        <span data-show-lang="ja">倒れたらゲームオーバー</span>
+        <span data-show-lang="en">One wrong move</span>
+      </h3>
+      <p class="feat-text">
+        <span data-show-lang="ja">どこまで高く積めるか。倒れたらそこで終了。シンプルなルールが、何度も挑戦したくなる中毒性を生みます。</span>
+        <span data-show-lang="en">How high can you go? If it falls, it's over. One simple rule, endless replays.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<section class="bottom-cta" id="download">
+  <div class="bottom-cta-content">
+    <h2>
+      <span data-show-lang="ja">さあ、<span class="pop">積みはじめよう。</span></span>
+      <span data-show-lang="en">Start <span class="pop">stacking.</span></span>
+    </h2>
+    <p>
+      <span data-show-lang="ja">無料でダウンロードできます。</span>
+      <span data-show-lang="en">Free to download.</span>
+    </p>
+    <a href="https://apps.apple.com/app/id6766160511" class="cta-primary">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.41-1.09-.47-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.41C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+      <span data-show-lang="ja">App Storeで入手</span>
+      <span data-show-lang="en">Download on App Store</span>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-icon"></span>
+      <span data-show-lang="ja">トルツミー</span>
+      <span data-show-lang="en">Snap Stack</span>
+    </div>
+    <div class="footer-links">
+      <a href="./privacy.html">
+        <span data-show-lang="ja">プライバシーポリシー</span>
+        <span data-show-lang="en">Privacy Policy</span>
+      </a>
+      <a href="./support.html">
+        <span data-show-lang="ja">サポート</span>
+        <span data-show-lang="en">Support</span>
+      </a>
+      <a href="mailto:snow0325@gmail.com">
+        <span data-show-lang="ja">お問い合わせ</span>
+        <span data-show-lang="en">Contact</span>
+      </a>
+    </div>
+    <div class="footer-copy">© 2026 8ight Apps</div>
+  </div>
+</footer>
+
+<script>
+  const buttons = document.querySelectorAll('[data-lang-btn]');
+  const heroVideo = document.getElementById('hero-video');
+  const heroVideoSource = heroVideo.querySelector('source');
+
+  function setLang(lang) {
+    document.body.setAttribute('data-lang', lang);
+    document.documentElement.setAttribute('lang', lang);
+    buttons.forEach(b => b.classList.toggle('active', b.getAttribute('data-lang-btn') === lang));
+
+    // swap hero video
+    const newVideoSrc = lang === 'ja' ? 'ja.mp4' : 'en.mp4';
+    if (heroVideoSource.getAttribute('src') !== newVideoSrc) {
+      heroVideoSource.setAttribute('src', newVideoSrc);
+      heroVideo.load();
+      heroVideo.play().catch(() => {});
+    }
+
+    try { localStorage.setItem('lp-lang', lang); } catch(e) {}
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => setLang(btn.getAttribute('data-lang-btn')));
+  });
+
+  // Initialize
+  let initialLang = 'ja';
+  try {
+    const saved = localStorage.getItem('lp-lang');
+    if (saved === 'ja' || saved === 'en') {
+      initialLang = saved;
+    } else if (navigator.language && navigator.language.toLowerCase().indexOf('ja') !== 0) {
+      initialLang = 'en';
+    }
+  } catch(e) {}
+  setLang(initialLang);
+</script>
+
+</body>
+</html>
