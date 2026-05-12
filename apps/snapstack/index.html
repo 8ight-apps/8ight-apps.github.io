@@ -138,15 +138,24 @@
   /* === Hero === */
   .hero {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 60px;
-    padding: 140px 80px 80px;
+    text-align: center;
+    padding: 120px 24px 0;
     position: relative;
     z-index: 1;
   }
-  .hero-content { position: relative; z-index: 2; }
+
+  .hero-top {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1100px;
+  }
 
   .badge {
     display: inline-flex;
@@ -159,7 +168,7 @@
     border-radius: 999px;
     font-size: 13px;
     font-weight: 700;
-    margin-bottom: 28px;
+    margin-bottom: 36px;
     color: var(--ink);
   }
   .badge::before {
@@ -177,12 +186,12 @@
   }
 
   h1.hero-title {
-    font-size: clamp(56px, 8vw, 130px);
+    font-size: clamp(72px, 14vw, 200px);
     font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
-    margin-bottom: 28px;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
     color: var(--ink);
+    margin: 0;
   }
   h1.hero-title .pop {
     background: linear-gradient(135deg, var(--pop-pink) 0%, var(--pop-yellow) 50%, var(--pop-green) 100%);
@@ -194,11 +203,41 @@
     padding-right: 0.1em;
   }
 
+  /* Hero video - peek from bottom */
+  .hero-video-peek {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+  }
+  .phone-frame {
+    width: clamp(280px, 32vw, 380px);
+    border-radius: 40px;
+    overflow: hidden;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.25));
+  }
+  .phone-frame:hover { transform: scale(1.02); }
+  .phone-frame img,
+  .phone-frame video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* === Sub-hero (scroll target) === */
+  .sub-hero {
+    padding: 80px 24px 100px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
   .tagline {
-    font-size: clamp(16px, 1.5vw, 20px);
+    font-size: clamp(17px, 1.6vw, 22px);
     color: var(--ink-soft);
-    max-width: 520px;
-    margin-bottom: 40px;
+    max-width: 600px;
+    margin: 0 auto 40px;
     line-height: 1.6;
     font-weight: 500;
   }
@@ -207,6 +246,7 @@
     display: flex;
     gap: 16px;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
   }
   .cta-primary {
@@ -215,7 +255,7 @@
     gap: 10px;
     background: var(--ink);
     color: #fff;
-    padding: 17px 30px;
+    padding: 18px 32px;
     border-radius: 16px;
     text-decoration: none;
     font-weight: 700;
@@ -235,57 +275,20 @@
   }
   .cta-meta strong { color: var(--ink); }
 
-  /* Hero phone */
-  .hero-phone {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .phone-frame {
-    width: 320px;
-    border-radius: 40px;
-    overflow: hidden;
-    transform: rotate(-3deg);
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.25));
-  }
-  .phone-frame:hover { transform: rotate(-1deg) scale(1.02); }
-  .phone-frame img,
-  .phone-frame video {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  /* Decorative dots */
-  .deco {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    animation: float 6s ease-in-out infinite;
-  }
-  .deco-1 { width: 30px; height: 30px; background: var(--pop-pink); top: 5%; left: -20px; opacity: 0.6; animation-delay: 0s; }
-  .deco-2 { width: 50px; height: 50px; background: var(--pop-yellow); top: 60%; right: -25px; opacity: 0.5; animation-delay: 1s; }
-  .deco-3 { width: 20px; height: 20px; background: var(--pop-green); bottom: 8%; left: -10px; opacity: 0.7; animation-delay: 2s; }
-  .deco-4 { width: 14px; height: 14px; background: var(--pop-blue); top: 30%; right: 20px; opacity: 0.7; animation-delay: 3s; }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-  }
-
   /* Stats */
   .stats {
     display: flex;
-    gap: 40px;
-    margin-top: 56px;
-    padding-top: 32px;
+    gap: 56px;
+    margin-top: 64px;
+    padding-top: 40px;
     border-top: 1px solid rgba(0,0,0,0.08);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
   }
   .stat-num {
-    font-size: 30px;
+    font-size: 32px;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--ink);
@@ -528,33 +531,20 @@
   @media (max-width: 900px) {
     nav { padding: 16px 20px; }
     nav .nav-cta { display: none; }
-    .hero {
-      grid-template-columns: 1fr;
-      padding: 120px 24px 60px;
-      text-align: center;
-      gap: 50px;
-    }
-    .hero-content { order: 2; }
-    .hero-phone { order: 1; }
-    .badge { margin-left: auto; margin-right: auto; }
-    .phone-frame { width: 260px; }
-    .cta-group { justify-content: center; }
-    .stats { justify-content: center; }
+    .hero { padding: 100px 20px 0; }
+    .badge { margin-bottom: 28px; }
     section.block { padding: 80px 24px; }
     .ss-grid { grid-template-columns: 1fr; gap: 40px; }
     .ss-item:nth-child(n) { transform: rotate(0); }
     .feat-grid { grid-template-columns: 1fr; }
     .footer-inner { flex-direction: column; text-align: center; }
+    .stats { gap: 32px; }
   }
 
   /* === Hero load animation === */
-  .hero-content > * { animation: fadeUp 0.8s ease backwards; }
-  .hero-content .badge { animation-delay: 0.1s; }
-  .hero-content h1 { animation-delay: 0.2s; }
-  .hero-content .tagline { animation-delay: 0.35s; }
-  .hero-content .cta-group { animation-delay: 0.5s; }
-  .hero-content .stats { animation-delay: 0.65s; }
-  .hero-phone { animation: fadeUp 1s ease 0.3s backwards; }
+  .badge { animation: fadeUp 0.8s ease 0.1s backwards; }
+  h1.hero-title { animation: fadeUp 0.8s ease 0.2s backwards; }
+  .hero-video-peek { animation: fadeUp 1s ease 0.5s backwards; }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
@@ -590,7 +580,7 @@
 
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-content">
+  <div class="hero-top">
     <div class="badge">
       <span data-show-lang="ja">NEW</span>
       <span data-show-lang="en">NEW</span>
@@ -599,50 +589,50 @@
       <span data-show-lang="ja">撮って、<br><span class="pop">積もう。</span></span>
       <span data-show-lang="en">Snap it.<br><span class="pop">Stack it.</span></span>
     </h1>
-    <p class="tagline">
-      <span data-show-lang="ja">身の回りのモノを写真に撮って、積み上げる新感覚の物理パズル。あなたの世界で、どこまで高く積めますか？</span>
-      <span data-show-lang="en">A new kind of physics puzzle. Take a photo of anything around you, and stack it. How high can you go?</span>
-    </p>
-    <div class="cta-group">
-      <a href="https://apps.apple.com/app/id6766160511" class="cta-primary" id="appstore-link">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.41-1.09-.47-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.41C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-        <span data-show-lang="ja">App Storeで入手</span>
-        <span data-show-lang="en">Download on App Store</span>
-      </a>
-      <div class="cta-meta">
-        <span data-show-lang="ja"><strong>無料</strong>でダウンロード</span>
-        <span data-show-lang="en"><strong>Free</strong> to download</span>
-      </div>
-    </div>
-
-    <div class="stats">
-      <div>
-        <div class="stat-num">3D</div>
-        <div class="stat-label" data-show-lang="ja">物理エンジン</div>
-        <div class="stat-label" data-show-lang="en">Physics</div>
-      </div>
-      <div>
-        <div class="stat-num">∞</div>
-        <div class="stat-label" data-show-lang="ja">遊び方</div>
-        <div class="stat-label" data-show-lang="en">Ways to play</div>
-      </div>
-      <div>
-        <div class="stat-num">📷</div>
-        <div class="stat-label" data-show-lang="ja">写真切り抜き</div>
-        <div class="stat-label" data-show-lang="en">Photo cutout</div>
-      </div>
-    </div>
   </div>
 
-  <div class="hero-phone">
-    <div class="deco deco-1"></div>
-    <div class="deco deco-2"></div>
-    <div class="deco deco-3"></div>
-    <div class="deco deco-4"></div>
+  <div class="hero-video-peek">
     <div class="phone-frame">
       <video autoplay muted loop playsinline preload="metadata" id="hero-video">
         <source src="ja.mp4" type="video/mp4">
       </video>
+    </div>
+  </div>
+</section>
+
+<!-- Sub-hero (tagline + CTA) -->
+<section class="sub-hero">
+  <p class="tagline">
+    <span data-show-lang="ja">身の回りのモノを写真に撮って、積み上げる新感覚の物理パズル。あなたの世界で、どこまで高く積めますか？</span>
+    <span data-show-lang="en">A new kind of physics puzzle. Take a photo of anything around you, and stack it. How high can you go?</span>
+  </p>
+  <div class="cta-group">
+    <a href="https://apps.apple.com/app/id6766160511" class="cta-primary" id="appstore-link">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.41-1.09-.47-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.41C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+      <span data-show-lang="ja">App Storeで入手</span>
+      <span data-show-lang="en">Download on App Store</span>
+    </a>
+    <div class="cta-meta">
+      <span data-show-lang="ja"><strong>無料</strong>でダウンロード</span>
+      <span data-show-lang="en"><strong>Free</strong> to download</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div>
+      <div class="stat-num">3D</div>
+      <div class="stat-label" data-show-lang="ja">物理エンジン</div>
+      <div class="stat-label" data-show-lang="en">Physics</div>
+    </div>
+    <div>
+      <div class="stat-num">∞</div>
+      <div class="stat-label" data-show-lang="ja">遊び方</div>
+      <div class="stat-label" data-show-lang="en">Ways to play</div>
+    </div>
+    <div>
+      <div class="stat-num">📷</div>
+      <div class="stat-label" data-show-lang="ja">写真切り抜き</div>
+      <div class="stat-label" data-show-lang="en">Photo cutout</div>
     </div>
   </div>
 </section>
