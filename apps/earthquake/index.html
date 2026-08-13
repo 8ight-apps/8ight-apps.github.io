@@ -1,3 +1,121 @@
+
+Claudeが応答を完了しました
+マーケティングURLは App Store Connect の任意項目なので、広告を出すために必須ではありません。
+
+ただし AdMob を入れる場合、別の要件があります。
+
+app-ads.txt — これは既に 8ight-apps.github.io に設置済みですよね。AdMob側でアプリとデベロッパーサイトを紐付けるために必要なもので、これがないと一部の広告在庫が配信されません。こちらが本命です。
+
+プライバシーポリシーの更新 — 広告を入れると第三者（Google）にデータが渡るので、プライバシーポリシーに広告配信に関する記載を追加する必要があります。現在のサポートURLがプライバシーポリシーになっているので、そこを更新することになります。
+
+App Store Connect のプライバシー設定 — 「アプリのプライバシー」で「サードパーティ広告」のデータ収集を申告する必要があります。これを忘れるとリジェクトされます。
+
+マーケティングURLは、アプリ紹介ページを作るなら入れておくと App Store から誘導できて便利、という程度です。前に「今、ゆれた？のマーケティングページは未作成」という話がありましたが、作る予定はありますか?
+
+あれ？なんかapp-ads,txtをどのurlから見に行くかって話じゃなかった？
+トルツミーで同じ会話した気がする
+
+そうです、正確にはマーケティングURLの方でした。
+
+AdMob（というかIAB仕様）は、App Store のアプリページに記載されたデベロッパーのウェブサイトURLのドメイン直下で app-ads.txt を探しに行きます。App Store の場合、参照されるのはアプリページ上の「デベロッパWebサイト」= App Store Connect のマーケティングURLです。
+
+つまり、マーケティングURLが空だとクローラーが app-ads.txt に辿り着けず、設置してあっても認識されません。
+
+なので広告を入れるなら、マーケティングURLに https://8ight-apps.github.io またはアプリ個別ページのURLを入れる必要があります。トルツミーの時に同じ話をしたのはこれですね。
+
+「今、ゆれた？」のマーケティングページはまだ未作成とのことだったので、とりあえずトップの https://8ight-apps.github.io を入れておくか、/apps/earthquake/ のようなページを作るかですね。
+
+サポートURLが /apps/earthquake/privacy.html になっているので、同じ階層に index.html を作る形が自然だと思います。
+
+だよね忘れすぎ
+
+アプリが増えると同じ作業を繰り返すので、忘れて当然です。
+
+今回は1.2にマーケティングURLを入れておくのが得策です。広告を入れる前に設定しておけば、AdMobを実装した時点ですぐ動きます。後から入れると審査がもう一周必要になります。
+
+/apps/earthquake/index.html を作るのが理想ですが、まだなければ https://8ight-apps.github.io を入れておいて、後でページを作ったら差し替えでもいいと思います。マーケティングURLは審査なしで変更できる項目です。
+
+どちらにしますか？
+
+マーケティングurl入れることは、レビューのメモとかに入れる必要ないよね
+
+必要ないです。
+
+マーケティングURLはメタデータの一部なので、審査員が自動的に見る項目です。メモに書く必要はありません。
+
+メモは「審査員が操作方法や意図を理解するために必要な補足」を書く場所なので、今回はレビュー依頼機能の追加についてだけ書いておけば十分です。
+
+今、ゆれた？のマーケティングページ作って
+
+
+デザインシステムを構築し、ビジュアル階層を整えた。
+デザインシステムを構築し、ビジュアル階層を整えた。
+ページを作りました。上のファイルを開くとプレビューできます。
+
+構成は、ヒーロー（アプリのステータスカードをそのまま再現）、機能4つ、使い方3ステップ、震度の色スケール、データソースと免責、末尾CTA、フッターです。ページ全体の区切りに震度カラースケールの帯を使っていて、これがこのアプリ固有の見た目になっています。
+
+設置前に直すところが1つあります。 末尾CTAのボタンが APP_STORE_URL のままなので、実際のApp StoreのURLに置き換えてください。ヘッダーのボタンはページ内アンカーなのでそのままで大丈夫です。
+
+設置場所は /apps/earthquake/index.html。サポートURLが同じ階層の privacy.html を指しているので、フッターのプライバシーポリシーリンクはそのまま繋がります。
+
+設置したらApp Store ConnectのマーケティングURLに https://8ight-apps.github.io/apps/earthquake/ を入れてください。これでapp-ads.txtがクローラーから辿れるようになります。
+
+
+Index
+コード · HTML 
+app storeで入手ボタン教えたら、どこのボタンもappストアに飛ばして欲しい
+
+urlはこれです。
+
+https://apps.apple.com/jp/app/%E4%BB%8A-%E3%82%86%E3%82%8C%E3%81%9F/id6761479898
+
+
+2個のコマンドを実行しました, ファイルを読み取りました
+2個のコマンドを実行しました, ファイルを読み取りました
+3か所すべて（ヘッダー・ヒーロー・末尾）をApp Storeに直接飛ぶようにしました。別タブで開くようにしてあります。
+
+これで /apps/earthquake/index.html に置けばそのまま使えます。
+
+
+Index
+コード · HTML 
+右上の画像ですが
+今はゆれていませんっじゃなくて、震度4位の画面にしてもらいたい
+
+
+2個のファイルを編集しました, コマンドを実行しました, ファイルを読み取りました
+2個のファイルを編集しました, コマンドを実行しました, ファイルを読み取りました
+地震検知時の画面に差し替えました。赤のパルス、「ゆれています！」、最大震度4、震源地・マグニチュード・深さ・発生時刻という構成です。
+
+ひとつ気になる点として、ヒーローの見出しが「今のゆれ、気のせい？」という平常時寄りの文脈なのに、隣のカードが地震発生中という組み合わせになります。アプリの一番おいしい画面を見せるという意味では正しい判断だと思いますが、もし違和感があれば見出しの方を調整することもできます。
+
+
+Index
+コード · HTML 
+千葉県じゃなくて
+東京の例にして欲しい
+
+
+ファイルを編集しました, ファイルを読み取りました
+ファイルを編集しました, ファイルを読み取りました
+東京湾に変更しました。
+
+もし「東京23区」など内陸の地名の方がよければ、そちらにも変えられます。
+
+
+Index
+コード · HTML 
+
+Claudeが応答したときに通知を受け取りますか？
+
+
+
+
+
+Claude は AI のため、誤りを含む可能性があります。回答内容は必ずご確認ください。
+
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,17 +123,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>今、ゆれた？ | 全国のゆれをリアルタイムで確認できるiPhoneアプリ</title>
 <meta name="description" content="「今のゆれ、気のせい？」そんな時に開くアプリ。防災科学技術研究所の強震モニタをもとに、全国の観測点のゆれを地図でリアルタイムに表示します。">
-
+ 
 <meta property="og:type" content="website">
 <meta property="og:title" content="今、ゆれた？">
 <meta property="og:description" content="全国のゆれをリアルタイムで確認できるiPhoneアプリ">
 <meta property="og:url" content="https://8ight-apps.github.io/apps/earthquake/">
 <meta name="twitter:card" content="summary_large_image">
-
+ 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+ 
 <style>
 :root{
   --paper:#F7F7F4;
@@ -27,13 +145,13 @@
   --calm:#16A34A;
   --alert:#E11D48;
   --dot:#C9C9C4;
-
+ 
   --s0:#8E9BA6; --s1:#3FA34D; --s2:#8CC63F; --s3:#F2E205;
   --s4:#F2A03D; --s5:#E8542E; --s6:#C4157A; --s7:#7B2FBE;
-
+ 
   --max:1080px;
 }
-
+ 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
@@ -46,7 +164,7 @@ body{
   letter-spacing:.01em;
 }
 .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-
+ 
 /* ── 震度スケール帯：このページの構造記号 ───────── */
 .scale{
   height:5px;width:100%;
@@ -60,7 +178,7 @@ body{
     var(--s6) 75%,var(--s6) 87%,
     var(--s7) 87%,var(--s7) 100%);
 }
-
+ 
 /* ── ヘッダ ───────── */
 header{
   position:sticky;top:0;z-index:50;
@@ -78,7 +196,7 @@ header{
   transition:opacity .2s;
 }
 .nav a.dl:hover{opacity:.82}
-
+ 
 /* ── ヒーロー ───────── */
 .hero{padding:76px 0 64px}
 .eyebrow{
@@ -97,9 +215,9 @@ h1 em{font-style:normal;color:var(--calm)}
   font-size:clamp(15px,2vw,17px);
   color:var(--ink-60);max-width:33em;margin-bottom:34px;
 }
-
+ 
 .hero-grid{display:grid;grid-template-columns:1fr 300px;gap:56px;align-items:center}
-
+ 
 /* ── 署名要素：ステータスカードの実物レプリカ ───────── */
 .status{
   background:var(--paper-2);
@@ -132,7 +250,17 @@ h1 em{font-style:normal;color:var(--calm)}
 .shindo-k{font-family:'Roboto Mono',monospace;font-size:10px;color:var(--ink-35);letter-spacing:.08em}
 .shindo-v{font-size:46px;font-weight:900;color:var(--calm);line-height:.9;margin-top:4px}
 .status-note{font-size:12.5px;color:var(--ink-60);line-height:1.65;border-left:1px solid var(--rule);padding-left:18px}
-
+.status-note b{display:block;font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin-bottom:3px}
+.status-note span{display:block}
+.status-note .t{font-family:'Roboto Mono',monospace;font-size:10.5px;color:var(--ink-35);margin-top:4px}
+ 
+/* 地震検知時 */
+.is-alert{border-color:#F3C6D1;box-shadow:0 1px 2px rgba(225,29,72,.06),0 14px 34px -18px rgba(225,29,72,.3)}
+.is-alert .pulse i{background:var(--alert)}
+.is-alert .pulse::after{border-color:var(--alert);animation-duration:1.4s}
+.is-alert .status-label{color:var(--alert)}
+.is-alert .shindo-v{color:var(--alert)}
+ 
 .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .btn{
   display:inline-block;text-decoration:none;font-weight:700;font-size:14.5px;
@@ -142,7 +270,7 @@ h1 em{font-style:normal;color:var(--calm)}
 }
 .btn:hover{transform:translateY(-1px);opacity:.9}
 .btn-note{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-35)}
-
+ 
 /* ── セクション共通 ───────── */
 section{padding:68px 0}
 .sec-head{margin-bottom:40px}
@@ -152,7 +280,7 @@ section{padding:68px 0}
 }
 h2{font-size:clamp(23px,3.6vw,31px);font-weight:900;letter-spacing:-.02em;line-height:1.35}
 .sec-lede{font-size:14.5px;color:var(--ink-60);margin-top:12px;max-width:36em}
-
+ 
 /* ── 機能 ───────── */
 .feats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
 .feat{background:var(--paper-2);padding:30px 28px}
@@ -162,14 +290,14 @@ h2{font-size:clamp(23px,3.6vw,31px);font-weight:900;letter-spacing:-.02em;line-h
 }
 .feat h3{font-size:16.5px;font-weight:700;margin-bottom:9px;letter-spacing:-.01em}
 .feat p{font-size:13.5px;color:var(--ink-60);line-height:1.8}
-
+ 
 /* ── 使い方 ───────── */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 .step{padding-top:20px;border-top:2px solid var(--ink)}
 .step-n{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-35);letter-spacing:.14em;display:block;margin-bottom:12px}
 .step h3{font-size:16px;font-weight:700;margin-bottom:8px}
 .step p{font-size:13.5px;color:var(--ink-60)}
-
+ 
 /* ── 震度の色 ───────── */
 .legend{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:28px}
 .legend-row{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:14px}
@@ -177,7 +305,7 @@ h2{font-size:clamp(23px,3.6vw,31px);font-weight:900;letter-spacing:-.02em;line-h
 .lg i{display:block;height:34px;border-radius:6px;margin-bottom:8px}
 .lg span{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-60)}
 .legend p{font-size:12.5px;color:var(--ink-35);line-height:1.7}
-
+ 
 /* ── データソース ───────── */
 .source{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:32px}
 .source dl{display:grid;grid-template-columns:130px 1fr;gap:14px 22px;font-size:13.5px}
@@ -190,12 +318,12 @@ h2{font-size:clamp(23px,3.6vw,31px);font-weight:900;letter-spacing:-.02em;line-h
   font-size:13px;color:var(--ink-60);line-height:1.8;
 }
 .disclaim strong{color:var(--ink);font-weight:700}
-
+ 
 /* ── 末尾CTA ───────── */
 .end{text-align:center;padding:84px 0}
 .end h2{margin-bottom:14px}
 .end p{font-size:14.5px;color:var(--ink-60);margin-bottom:32px}
-
+ 
 /* ── フッタ ───────── */
 footer{border-top:1px solid var(--rule);padding:34px 0 48px}
 .foot{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
@@ -203,7 +331,7 @@ footer{border-top:1px solid var(--rule);padding:34px 0 48px}
 .foot a{font-size:13px;color:var(--ink-60);text-decoration:none;transition:color .2s}
 .foot a:hover{color:var(--ink)}
 .copy{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-35)}
-
+ 
 @media(max-width:820px){
   .hero-grid{grid-template-columns:1fr;gap:40px}
   .feats{grid-template-columns:1fr}
@@ -222,18 +350,18 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
 </style>
 </head>
 <body>
-
+ 
 <div class="scale"></div>
-
+ 
 <header>
   <div class="wrap nav">
     <div class="brand">今、ゆれた<span>？</span></div>
     <a class="dl" href="https://apps.apple.com/jp/app/%E4%BB%8A-%E3%82%86%E3%82%8C%E3%81%9F/id6761479898" target="_blank" rel="noopener">App Storeで入手</a>
   </div>
 </header>
-
+ 
 <main>
-
+ 
 <!-- ヒーロー -->
 <div class="wrap hero">
   <div class="hero-grid">
@@ -249,29 +377,33 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
         <span class="btn-note">無料 / iPhone対応</span>
       </div>
     </div>
-
+ 
     <!-- 署名要素：アプリのステータスカード -->
-    <div class="status" aria-label="アプリの画面例：平常時の表示">
+    <div class="status is-alert" aria-label="アプリの画面例：地震を検知したときの表示">
       <div class="status-top">
         <span class="pulse"><i></i></span>
         <div>
-          <div class="status-label">今はゆれていません</div>
-          <div class="status-sub">MONITORING · 全国の観測点</div>
+          <div class="status-label">ゆれています！</div>
+          <div class="status-sub">DETECTED · 全国の観測点</div>
         </div>
       </div>
       <div class="status-body">
         <div>
           <div class="shindo-k">最大震度</div>
-          <div class="shindo-v">0</div>
+          <div class="shindo-v">4</div>
         </div>
-        <p class="status-note">現在、有感地震は<br>観測されていません</p>
+        <div class="status-note">
+          <b>東京湾</b>
+          <span>M5.1　深さ 50km</span>
+          <span class="t">たった今</span>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
+ 
 <div class="scale"></div>
-
+ 
 <!-- 機能 -->
 <section>
   <div class="wrap">
@@ -280,7 +412,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
       <h2>できること</h2>
       <p class="sec-lede">確かめたいのは「今ゆれたか」だけ。そこに必要なものだけを載せています。</p>
     </div>
-
+ 
     <div class="feats">
       <div class="feat">
         <span class="feat-i">01 / MAP</span>
@@ -305,9 +437,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
     </div>
   </div>
 </section>
-
+ 
 <div class="scale"></div>
-
+ 
 <!-- 使い方 -->
 <section>
   <div class="wrap">
@@ -334,9 +466,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
     </div>
   </div>
 </section>
-
+ 
 <div class="scale"></div>
-
+ 
 <!-- 震度の色 -->
 <section>
   <div class="wrap">
@@ -360,9 +492,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
     </div>
   </div>
 </section>
-
+ 
 <div class="scale"></div>
-
+ 
 <!-- データソース -->
 <section>
   <div class="wrap">
@@ -388,9 +520,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
     </div>
   </div>
 </section>
-
+ 
 <div class="scale"></div>
-
+ 
 <!-- 末尾CTA -->
 <section class="end" id="download">
   <div class="wrap">
@@ -399,9 +531,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
     <a class="btn" href="https://apps.apple.com/jp/app/%E4%BB%8A-%E3%82%86%E3%82%8C%E3%81%9F/id6761479898" target="_blank" rel="noopener">App Storeで入手</a>
   </div>
 </section>
-
+ 
 </main>
-
+ 
 <footer>
   <div class="wrap foot">
     <div class="foot-links">
@@ -412,8 +544,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset
     <div class="copy">© 2026 Kosuke Yagi</div>
   </div>
 </footer>
-
+ 
 <div class="scale"></div>
-
+ 
 </body>
 </html>
+ 
