@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今、ゆれた？ | 全国のゆれをリアルタイムで確認できるiPhoneアプリ</title>
+<meta name="description" content="「今のゆれ、気のせい？」そんな時に開くアプリ。防災科学技術研究所の強震モニタをもとに、全国の観測点のゆれを地図でリアルタイムに表示します。">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="今、ゆれた？">
+<meta property="og:description" content="全国のゆれをリアルタイムで確認できるiPhoneアプリ">
+<meta property="og:url" content="https://8ight-apps.github.io/apps/earthquake/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F7F7F4;
+  --paper-2:#FFFFFF;
+  --ink:#17171A;
+  --ink-60:#5C5C63;
+  --ink-35:#9A9AA0;
+  --rule:#E2E2DC;
+  --calm:#16A34A;
+  --alert:#E11D48;
+  --dot:#C9C9C4;
+
+  --s0:#8E9BA6; --s1:#3FA34D; --s2:#8CC63F; --s3:#F2E205;
+  --s4:#F2A03D; --s5:#E8542E; --s6:#C4157A; --s7:#7B2FBE;
+
+  --max:1080px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Noto Sans JP',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:400;
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:.01em;
+}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+/* ── 震度スケール帯：このページの構造記号 ───────── */
+.scale{
+  height:5px;width:100%;
+  background:linear-gradient(90deg,
+    var(--s0) 0%,var(--s0) 12%,
+    var(--s1) 12%,var(--s1) 25%,
+    var(--s2) 25%,var(--s2) 37%,
+    var(--s3) 37%,var(--s3) 50%,
+    var(--s4) 50%,var(--s4) 62%,
+    var(--s5) 62%,var(--s5) 75%,
+    var(--s6) 75%,var(--s6) 87%,
+    var(--s7) 87%,var(--s7) 100%);
+}
+
+/* ── ヘッダ ───────── */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(247,247,244,.88);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{font-weight:900;font-size:16px;letter-spacing:-.01em}
+.brand span{color:var(--calm)}
+.nav a.dl{
+  font-size:13px;font-weight:700;text-decoration:none;
+  color:var(--paper-2);background:var(--ink);
+  padding:9px 18px;border-radius:999px;
+  transition:opacity .2s;
+}
+.nav a.dl:hover{opacity:.82}
+
+/* ── ヒーロー ───────── */
+.hero{padding:76px 0 64px}
+.eyebrow{
+  font-family:'Roboto Mono',monospace;
+  font-size:11px;letter-spacing:.16em;
+  color:var(--ink-35);text-transform:uppercase;
+  margin-bottom:22px;
+}
+h1{
+  font-size:clamp(38px,7.4vw,68px);
+  font-weight:900;line-height:1.16;
+  letter-spacing:-.03em;margin-bottom:20px;
+}
+h1 em{font-style:normal;color:var(--calm)}
+.lede{
+  font-size:clamp(15px,2vw,17px);
+  color:var(--ink-60);max-width:33em;margin-bottom:34px;
+}
+
+.hero-grid{display:grid;grid-template-columns:1fr 300px;gap:56px;align-items:center}
+
+/* ── 署名要素：ステータスカードの実物レプリカ ───────── */
+.status{
+  background:var(--paper-2);
+  border:1px solid var(--rule);
+  border-radius:18px;
+  padding:22px 24px;
+  box-shadow:0 1px 2px rgba(23,23,26,.04),0 14px 34px -18px rgba(23,23,26,.22);
+}
+.status-top{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+.pulse{position:relative;width:13px;height:13px;flex-shrink:0}
+.pulse i{
+  position:absolute;inset:0;border-radius:50%;
+  background:var(--calm);display:block;
+}
+.pulse::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  border:1.5px solid var(--calm);
+  animation:ring 2.4s cubic-bezier(.2,.6,.3,1) infinite;
+}
+@keyframes ring{
+  0%{transform:scale(1);opacity:.7}
+  100%{transform:scale(3.1);opacity:0}
+}
+.status-label{font-size:18px;font-weight:700;color:var(--calm);line-height:1.3}
+.status-sub{
+  font-family:'Roboto Mono',monospace;
+  font-size:10.5px;color:var(--ink-35);margin-top:2px;
+}
+.status-body{display:flex;align-items:center;gap:18px;padding-top:18px;border-top:1px solid var(--rule)}
+.shindo-k{font-family:'Roboto Mono',monospace;font-size:10px;color:var(--ink-35);letter-spacing:.08em}
+.shindo-v{font-size:46px;font-weight:900;color:var(--calm);line-height:.9;margin-top:4px}
+.status-note{font-size:12.5px;color:var(--ink-60);line-height:1.65;border-left:1px solid var(--rule);padding-left:18px}
+
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{
+  display:inline-block;text-decoration:none;font-weight:700;font-size:14.5px;
+  background:var(--ink);color:var(--paper-2);
+  padding:15px 32px;border-radius:999px;
+  transition:transform .18s ease,opacity .18s ease;
+}
+.btn:hover{transform:translateY(-1px);opacity:.9}
+.btn-note{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-35)}
+
+/* ── セクション共通 ───────── */
+section{padding:68px 0}
+.sec-head{margin-bottom:40px}
+.sec-num{
+  font-family:'Roboto Mono',monospace;font-size:11px;
+  color:var(--ink-35);letter-spacing:.14em;display:block;margin-bottom:10px;
+}
+h2{font-size:clamp(23px,3.6vw,31px);font-weight:900;letter-spacing:-.02em;line-height:1.35}
+.sec-lede{font-size:14.5px;color:var(--ink-60);margin-top:12px;max-width:36em}
+
+/* ── 機能 ───────── */
+.feats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+.feat{background:var(--paper-2);padding:30px 28px}
+.feat-i{
+  font-family:'Roboto Mono',monospace;font-size:10.5px;
+  color:var(--ink-35);letter-spacing:.12em;margin-bottom:14px;display:block;
+}
+.feat h3{font-size:16.5px;font-weight:700;margin-bottom:9px;letter-spacing:-.01em}
+.feat p{font-size:13.5px;color:var(--ink-60);line-height:1.8}
+
+/* ── 使い方 ───────── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.step{padding-top:20px;border-top:2px solid var(--ink)}
+.step-n{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-35);letter-spacing:.14em;display:block;margin-bottom:12px}
+.step h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.step p{font-size:13.5px;color:var(--ink-60)}
+
+/* ── 震度の色 ───────── */
+.legend{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:28px}
+.legend-row{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:14px}
+.lg{text-align:center}
+.lg i{display:block;height:34px;border-radius:6px;margin-bottom:8px}
+.lg span{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-60)}
+.legend p{font-size:12.5px;color:var(--ink-35);line-height:1.7}
+
+/* ── データソース ───────── */
+.source{background:var(--paper-2);border:1px solid var(--rule);border-radius:14px;padding:32px}
+.source dl{display:grid;grid-template-columns:130px 1fr;gap:14px 22px;font-size:13.5px}
+.source dt{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-35);letter-spacing:.06em;padding-top:5px}
+.source dd{color:var(--ink-60);line-height:1.75}
+.disclaim{
+  margin-top:26px;padding:18px 20px;
+  background:var(--paper);border-radius:10px;
+  border-left:3px solid var(--alert);
+  font-size:13px;color:var(--ink-60);line-height:1.8;
+}
+.disclaim strong{color:var(--ink);font-weight:700}
+
+/* ── 末尾CTA ───────── */
+.end{text-align:center;padding:84px 0}
+.end h2{margin-bottom:14px}
+.end p{font-size:14.5px;color:var(--ink-60);margin-bottom:32px}
+
+/* ── フッタ ───────── */
+footer{border-top:1px solid var(--rule);padding:34px 0 48px}
+.foot{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+.foot-links{display:flex;flex-wrap:wrap;gap:22px}
+.foot a{font-size:13px;color:var(--ink-60);text-decoration:none;transition:color .2s}
+.foot a:hover{color:var(--ink)}
+.copy{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--ink-35)}
+
+@media(max-width:820px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .feats{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr;gap:24px}
+  .source dl{grid-template-columns:1fr;gap:5px 0}
+  .source dt{padding-top:12px}
+  .legend-row{grid-template-columns:repeat(4,1fr)}
+  .hero{padding:52px 0 44px}
+  section{padding:52px 0}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="scale"></div>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">今、ゆれた<span>？</span></div>
+    <a class="dl" href="#download">App Storeで入手</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ヒーロー -->
+<div class="wrap hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">iPhone / リアルタイム強震モニタ</div>
+      <h1>今のゆれ、<br>気のせい<em>？</em></h1>
+      <p class="lede">
+        ゆれた気がしたら、開くだけ。全国の観測点から届くデータを地図に表示して、
+        いま日本のどこがゆれているのかを、その場で確かめられます。
+      </p>
+      <div class="cta-row">
+        <a class="btn" href="#download">App Storeで入手</a>
+        <span class="btn-note">無料 / iPhone対応</span>
+      </div>
+    </div>
+
+    <!-- 署名要素：アプリのステータスカード -->
+    <div class="status" aria-label="アプリの画面例：平常時の表示">
+      <div class="status-top">
+        <span class="pulse"><i></i></span>
+        <div>
+          <div class="status-label">今はゆれていません</div>
+          <div class="status-sub">MONITORING · 全国の観測点</div>
+        </div>
+      </div>
+      <div class="status-body">
+        <div>
+          <div class="shindo-k">最大震度</div>
+          <div class="shindo-v">0</div>
+        </div>
+        <p class="status-note">現在、有感地震は<br>観測されていません</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scale"></div>
+
+<!-- 機能 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">FEATURES</span>
+      <h2>できること</h2>
+      <p class="sec-lede">確かめたいのは「今ゆれたか」だけ。そこに必要なものだけを載せています。</p>
+    </div>
+
+    <div class="feats">
+      <div class="feat">
+        <span class="feat-i">01 / MAP</span>
+        <h3>全国のゆれを地図で見る</h3>
+        <p>各地の観測点を震度ごとに色分けして地図に表示します。どの地域がゆれているのか、地図を見るだけで把握できます。</p>
+      </div>
+      <div class="feat">
+        <span class="feat-i">02 / REALTIME</span>
+        <h3>秒単位で更新される</h3>
+        <p>アプリを開いている間、観測データを短い間隔で取得し続けます。ゆれが広がっていく様子もそのまま見えます。</p>
+      </div>
+      <div class="feat">
+        <span class="feat-i">03 / EPICENTER</span>
+        <h3>震源と規模がわかる</h3>
+        <p>地震が発生すると、震源地・マグニチュード・深さ・最大震度を表示します。震源からゆれが広がる範囲も地図に重ねて描画します。</p>
+      </div>
+      <div class="feat">
+        <span class="feat-i">04 / HISTORY</span>
+        <h3>過去の地震をさかのぼる</h3>
+        <p>直近15日分の地震を一覧で確認できます。震度3以上だけに絞り込めるので、大きなゆれだけを追うこともできます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="scale"></div>
+
+<!-- 使い方 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">HOW IT WORKS</span>
+      <h2>使い方</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-n">STEP 01</span>
+        <h3>ゆれた気がしたら開く</h3>
+        <p>アプリを起動すると、その時点の観測データをすぐ取りにいきます。設定や操作は必要ありません。</p>
+      </div>
+      <div class="step">
+        <span class="step-n">STEP 02</span>
+        <h3>画面の色で判断する</h3>
+        <p>平常時は緑、地震を検知すると赤に変わります。開いた瞬間の色を見るだけで状況がわかります。</p>
+      </div>
+      <div class="step">
+        <span class="step-n">STEP 03</span>
+        <h3>地図で場所を確かめる</h3>
+        <p>ゆれている地域が色付きの点で表示されます。震源が出ている場合は、その位置も地図で確認できます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="scale"></div>
+
+<!-- 震度の色 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">INTENSITY SCALE</span>
+      <h2>震度の色</h2>
+      <p class="sec-lede">地図上の点は、気象庁の震度階級にあわせた色で表示されます。</p>
+    </div>
+    <div class="legend">
+      <div class="legend-row">
+        <div class="lg"><i style="background:var(--s0)"></i><span>0</span></div>
+        <div class="lg"><i style="background:var(--s1)"></i><span>1</span></div>
+        <div class="lg"><i style="background:var(--s2)"></i><span>2</span></div>
+        <div class="lg"><i style="background:var(--s3)"></i><span>3</span></div>
+        <div class="lg"><i style="background:var(--s4)"></i><span>4</span></div>
+        <div class="lg"><i style="background:var(--s5)"></i><span>5</span></div>
+        <div class="lg"><i style="background:var(--s6)"></i><span>6</span></div>
+        <div class="lg"><i style="background:var(--s7)"></i><span>7</span></div>
+      </div>
+      <p>震度0は人がゆれを感じないレベル、震度7は最も大きなゆれを表します。地図では色が濃く暖色に近づくほど、強いゆれが観測されていることを意味します。</p>
+    </div>
+  </div>
+</section>
+
+<div class="scale"></div>
+
+<!-- データソース -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">DATA SOURCE</span>
+      <h2>データについて</h2>
+    </div>
+    <div class="source">
+      <dl>
+        <dt>リアルタイム震度</dt>
+        <dd>防災科学技術研究所 強震モニタ（K-NET・KiK-net）</dd>
+        <dt>地震情報</dt>
+        <dd>気象庁（P2P地震情報 経由）</dd>
+        <dt>更新間隔</dt>
+        <dd>アプリを開いている間、数秒ごとに取得します。アプリを閉じている間は通信しません。</dd>
+        <dt>位置情報</dt>
+        <dd>使用しません。端末の位置情報を取得することはありません。</dd>
+      </dl>
+      <div class="disclaim">
+        <strong>本アプリは気象庁の緊急地震速報とは異なり、公式の防災警報ではありません。</strong><br>
+        表示される情報は観測データをもとにした参考値です。避難などの判断は、必ず気象庁や自治体の公式発表にしたがってください。
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="scale"></div>
+
+<!-- 末尾CTA -->
+<section class="end" id="download">
+  <div class="wrap">
+    <h2>ゆれた気がしたら、開くだけ。</h2>
+    <p>App Storeから無料で入手できます。</p>
+    <a class="btn" href="APP_STORE_URL">App Storeで入手</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="./privacy.html">プライバシーポリシー</a>
+      <a href="https://8ight-apps.github.io/">8ight Apps</a>
+      <a href="mailto:lavie3251@gmail.com">お問い合わせ</a>
+    </div>
+    <div class="copy">© 2026 Kosuke Yagi</div>
+  </div>
+</footer>
+
+<div class="scale"></div>
+
+</body>
+</html>
