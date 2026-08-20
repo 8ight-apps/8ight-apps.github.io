@@ -3,341 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>プライバシーポリシー｜あの飛行機 - 上空を飛ぶ便の行き先がわかる</title>
-<meta name="description" content="iPhoneアプリ「あの飛行機 - 上空を飛ぶ便の行き先がわかる」のプライバシーポリシー。位置情報の取り扱いについて。">
+<title>あの飛行機 — 8ight Apps</title>
+<meta name="description" content="上空に見えるあの飛行機は、どこへ行くのか。起動した瞬間、頭上を飛ぶ便の出発地と行き先がわかるiPhoneアプリです。">
+<meta property="og:title" content="あの飛行機">
+<meta property="og:description" content="上空に見えるあの飛行機は、どこへ行くのか">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --haze:#EEF3F6;
-    --paper:#FFFFFF;
-    --ink:#0E1A24;
-    --muted:#5B6C79;
-    --rule:#CBD6DE;
-    --signal:#1D6B52;
-    --signal-soft:#E3EFE9;
-    --measure:34rem;
+    --night:#070C14;
+    --ink:#EAF1F7;
+    --muted:#8FA0B2;
+    --faint:#5C6E80;
+    --rule:#1E2E3E;
+    --blue:#3B8CFF;
+    --orange:#FF7A2E;
+    --purple:#B45CE8;
   }
-
   *{box-sizing:border-box;}
-
-  html{-webkit-text-size-adjust:100%;}
-
   body{
     margin:0;
-    background:var(--haze);
+    background:var(--night);
     color:var(--ink);
-    font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
-    font-size:16px;
-    line-height:1.9;
+    font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+    line-height:1.85;
     font-feature-settings:"palt" 1;
   }
+  .wrap{max-width:56rem; margin:0 auto; padding:0 2rem;}
 
-  .sheet{
-    max-width:calc(var(--measure) + 8rem);
-    margin:0 auto;
-    background:var(--paper);
-    padding:4.5rem 4rem 5rem;
-    min-height:100vh;
-  }
+  header{position:relative; padding:6rem 0 4.5rem; overflow:hidden;}
+  .arcs{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:.5;}
+  .head-inner{position:relative;}
 
-  /* ---- header ---- */
-
-  .eyebrow{
+  .kicker{
     font-family:"IBM Plex Mono",ui-monospace,monospace;
-    font-size:.72rem;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--signal);
-    margin:0 0 1.6rem;
+    font-size:.7rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 1.6rem;
   }
-
   h1{
-    font-size:1.95rem;
-    line-height:1.45;
-    font-weight:700;
-    letter-spacing:.01em;
-    margin:0 0 .5rem;
+    font-size:clamp(2.4rem,7vw,3.6rem);
+    font-weight:900; line-height:1.3; margin:0 0 1.2rem;
+  }
+  .tagline{font-size:1.1rem; color:var(--muted); max-width:30rem; margin:0 0 2.4rem;}
+  .badge{
+    display:inline-block; padding:.9rem 1.9rem;
+    background:var(--ink); color:var(--night);
+    border-radius:999px; text-decoration:none; font-weight:700;
+  }
+  .badge-note{display:block; margin-top:.85rem; color:var(--faint); font-size:.82rem;}
+
+  .shots{
+    display:flex; gap:1.5rem; justify-content:center;
+    padding:3rem 0 5rem; flex-wrap:wrap;
+  }
+  .shots img{
+    width:min(30%,15rem); border-radius:1.6rem; display:block;
+    box-shadow:0 1.2rem 3rem rgba(0,0,0,.7), 0 0 0 1px var(--rule);
   }
 
-  .appname{
-    font-size:1rem;
-    font-weight:500;
-    color:var(--muted);
-    margin:0 0 2.5rem;
-  }
-
-  .meta{
-    font-family:"IBM Plex Mono",ui-monospace,monospace;
-    font-size:.76rem;
-    color:var(--muted);
-    letter-spacing:.03em;
-    padding-top:1.4rem;
-    border-top:1px solid var(--rule);
-    margin:0 0 3.5rem;
-  }
-  .meta span{margin-right:1.6rem; white-space:nowrap; display:inline-block;}
-
-  /* ---- signature: data flow strip ---- */
-
-  .flow{
-    background:var(--signal-soft);
-    border-left:3px solid var(--signal);
-    padding:1.6rem 1.8rem;
-    margin:0 0 3.5rem;
-  }
-  .flow h2{
-    font-family:"IBM Plex Mono",ui-monospace,monospace;
-    font-size:.72rem;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    color:var(--signal);
-    font-weight:500;
-    margin:0 0 1.1rem;
-  }
-  .flow ol{
-    list-style:none;
-    margin:0;
-    padding:0;
-    font-size:.94rem;
-    line-height:1.75;
-  }
-  .flow li{
-    position:relative;
-    padding-left:1.7rem;
-    margin-bottom:.55rem;
-  }
-  .flow li:last-child{margin-bottom:0;}
-  .flow li::before{
-    content:"↓";
-    position:absolute;
-    left:0;
-    top:0;
-    font-family:"IBM Plex Mono",monospace;
-    color:var(--signal);
-  }
-  .flow li:first-child::before{content:"◉";}
-
-  /* ---- sections ---- */
-
-  section{margin-bottom:3rem;}
-
-  h2.head{
-    font-size:1.06rem;
-    font-weight:700;
-    margin:0 0 .9rem;
-    padding-bottom:.55rem;
-    border-bottom:1px solid var(--rule);
-    letter-spacing:.02em;
-  }
-
-  p{margin:0 0 1.1rem; max-width:var(--measure);}
+  section{padding:3.5rem 0; border-top:1px solid var(--rule);}
+  h2{font-size:1.15rem; font-weight:700; margin:0 0 1rem;}
+  p{margin:0 0 1rem; color:var(--muted); font-size:.97rem; max-width:36rem;}
   p:last-child{margin-bottom:0;}
 
-  ul.plain{
-    margin:0 0 1.1rem;
-    padding-left:1.15rem;
-    max-width:var(--measure);
-  }
-  ul.plain li{margin-bottom:.45rem;}
-
-  strong{font-weight:700;}
-
-  a{color:var(--signal); text-decoration:underline; text-underline-offset:.18em;}
-  a:hover{text-decoration-thickness:2px;}
-  a:focus-visible{outline:2px solid var(--signal); outline-offset:3px;}
-
-  .sources{
-    margin:0;
-    padding:0;
-    list-style:none;
-    max-width:var(--measure);
-  }
+  .sources{list-style:none; margin:1.2rem 0 0; padding:0; max-width:36rem;}
   .sources li{
-    padding:.95rem 0;
-    border-bottom:1px solid var(--rule);
+    padding:.8rem 0; border-bottom:1px solid var(--rule);
+    display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap;
+    font-size:.92rem;
   }
-  .sources li:first-child{border-top:1px solid var(--rule);}
-  .sources .role{
-    font-family:"IBM Plex Mono",monospace;
-    font-size:.72rem;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:var(--muted);
-    display:block;
-    margin-bottom:.2rem;
-  }
+  .sources .who{color:var(--faint); font-family:"IBM Plex Mono",monospace; font-size:.78rem;}
 
-  .contact{
-    font-family:"IBM Plex Mono",ui-monospace,monospace;
-    font-size:.9rem;
-  }
+  .note{font-size:.85rem; color:var(--faint);}
 
-  /* ---- english ---- */
+  footer{border-top:1px solid var(--rule); padding:2.5rem 0 3.5rem;}
+  .foot-row{display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; align-items:center;}
+  footer a{color:var(--muted); text-decoration:none; margin-right:1.6rem; font-size:.9rem;}
+  footer a:hover{color:var(--ink); text-decoration:underline;}
+  .copy{color:var(--faint); font-family:"IBM Plex Mono",monospace; font-size:.75rem;}
+  a:focus-visible{outline:2px solid var(--blue); outline-offset:3px;}
 
-  .en{
-    margin-top:5rem;
-    padding-top:3rem;
-    border-top:3px double var(--rule);
-    color:var(--muted);
-  }
-  .en h2.head{color:var(--ink);}
-  .en p, .en li{font-size:.94rem;}
-
-  footer{
-    margin-top:4rem;
-    padding-top:1.5rem;
-    border-top:1px solid var(--rule);
-    font-family:"IBM Plex Mono",monospace;
-    font-size:.74rem;
-    color:var(--muted);
-    letter-spacing:.03em;
-  }
-
-  @media (max-width:640px){
-    body{font-size:15px;}
-    .sheet{padding:3rem 1.4rem 3.5rem;}
-    h1{font-size:1.5rem;}
-    .meta span{display:block; margin-bottom:.3rem;}
-  }
-
-  @media (prefers-reduced-motion:no-preference){
-    .sheet{animation:rise .5s ease-out;}
-    @keyframes rise{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  @media (max-width:700px){
+    .wrap{padding:0 1.4rem;}
+    header{padding:3.5rem 0 2.5rem;}
+    .shots{gap:.8rem; padding:2rem 0 3rem;}
+    .shots img{width:min(46%,11rem);}
   }
 </style>
 </head>
 <body>
-<main class="sheet">
 
-  <p class="eyebrow">Privacy Policy</p>
-  <h1>プライバシーポリシー</h1>
-  <p class="appname">あの飛行機 - 上空を飛ぶ便の行き先がわかる</p>
-
-  <p class="meta">
-    <span>制定日 2026-08-18</span>
-    <span>最終更新 2026-08-18</span>
-    <span>提供 8ight Apps</span>
-  </p>
-
-  <div class="flow">
-    <h2>位置情報のたどる経路</h2>
-    <ol>
-      <li>端末が現在地の緯度経度を取得する</li>
-      <li>その座標を adsb.lol へ送り、周辺を飛ぶ機体を問い合わせる</li>
-      <li>返ってきた機体の情報を画面に表示する</li>
-      <li>座標は保存されず、通信の完了とともに破棄される</li>
-    </ol>
+<header>
+  <svg class="arcs" viewBox="0 0 1200 500" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M-50 440 C 260 340, 660 200, 1250 40" fill="none" stroke="#3B8CFF" stroke-width="2" opacity=".5"/>
+    <path d="M-50 500 C 320 400, 740 300, 1250 160" fill="none" stroke="#FF7A2E" stroke-width="2" opacity=".35" stroke-dasharray="9 11"/>
+    <path d="M-50 370 C 220 300, 700 150, 1250 -20" fill="none" stroke="#B45CE8" stroke-width="2" opacity=".28" stroke-dasharray="9 11"/>
+  </svg>
+  <div class="wrap head-inner">
+    <p class="kicker">iPhone App — 8ight Apps</p>
+    <h1>あの飛行機</h1>
+    <p class="tagline">上空に見えるあの飛行機は、どこへ行くのか。起動すると、いま見えている飛行機が近い順に3機ならび、それぞれの出発地と行き先が地図でわかります。</p>
+    <a class="badge" href="#">App Store でダウンロード</a>
+    <span class="badge-note">iPhone・iOS 18.0 以降 ／ 無料</span>
   </div>
+</header>
 
-  <section>
-    <h2 class="head">収集しない情報</h2>
-    <p>本アプリはアカウント登録を必要としません。氏名、メールアドレス、電話番号、生年月日といった個人を特定できる情報を、一切収集しません。</p>
-    <p>広告識別子（IDFA）の取得、行動履歴の追跡、アクセス解析ツールの利用も行っていません。</p>
-  </section>
+<div class="wrap shots">
+  <img src="01.png" alt="頭上を飛ぶ便の経路が地図に表示されている画面">
+  <img src="02.png" alt="選択した便の出発地と行き先、残り時間が表示されている画面">
+  <img src="03.png" alt="複数の便の経路が同時に表示されている画面">
+</div>
 
-  <section>
-    <h2 class="head">位置情報の取り扱い</h2>
-    <p>本アプリは、<strong>あなたの上空を飛んでいる飛行機を探すためだけ</strong>に、端末の位置情報を使用します。</p>
-    <p>取得のタイミングは、アプリを使用している間に限られます（「Appの使用中のみ許可」）。バックグラウンドでの取得は行いません。</p>
-    <p><strong>取得した緯度経度は、機体を検索するために外部のデータ提供元へ送信されます。</strong>これは「その座標の周辺に何が飛んでいるか」を問い合わせるために必要な処理です。送信されるのは座標のみで、あなたを識別する情報は含まれません。</p>
-    <p>位置情報を端末内やサーバーに保存することはありません。履歴も残しません。</p>
-    <p>位置情報の利用は、iOS の設定からいつでも許可・不許可を切り替えられます。不許可にした場合、上空の飛行機を表示する機能は利用できません。</p>
-  </section>
+<section class="wrap">
+  <h2>データについて</h2>
+  <p>上空を飛ぶ機体の情報は、世界各地の個人が自宅に設置した受信機が拾った電波から届いています。</p>
+  <ul class="sources">
+    <li><span>機体の位置・航跡</span><span class="who">adsb.lol — ODbL 1.0</span></li>
+    <li><span>路線</span><span class="who">adsbdb</span></li>
+    <li><span>空港の位置</span><span class="who">OurAirports — Public Domain</span></li>
+    <li><span>空港の日本語名</span><span class="who">Wikidata — CC0 1.0</span></li>
+  </ul>
+  <p class="note" style="margin-top:1.5rem;">本アプリは娯楽目的です。運航、航法、衝突回避その他の重要な用途には使用しないでください。表示されるデータの正確性はデータ提供者に依存します。本アプリは上記のデータ提供元とは無関係の独立したアプリです。</p>
+</section>
 
-  <section>
-    <h2 class="head">外部のデータ提供元</h2>
-    <p>本アプリは、飛行機の情報を以下の外部サービスから取得しています。それぞれのサービスにおける情報の取り扱いは、各社の方針に従います。</p>
-    <ul class="sources">
-      <li>
-        <span class="role">位置・航跡データ／座標の送信先</span>
-        <a href="https://adsb.lol" rel="noopener">adsb.lol</a>
-      </li>
-      <li>
-        <span class="role">路線データ</span>
-        <a href="https://adsbdb.com" rel="noopener">adsbdb</a>
-      </li>
-      <li>
-        <span class="role">空港の位置データ</span>
-        <a href="https://ourairports.com" rel="noopener">OurAirports</a>
-      </li>
-      <li>
-        <span class="role">空港の日本語名</span>
-        <a href="https://www.wikidata.org" rel="noopener">Wikidata</a>
-      </li>
-    </ul>
-    <p>本アプリは、これらのデータ提供元とは一切関係のない独立したアプリです。</p>
-    <p>地図の表示には Apple の MapKit を使用しています。地図の利用に関する情報の取り扱いは、Apple のプライバシーポリシーに従います。</p>
-  </section>
+<section class="wrap">
+  <h2>お問い合わせ</h2>
+  <p>アプリについてのご質問・ご要望は、<a href="mailto:snow0325@gmail.com" style="color:var(--blue);">snow0325@gmail.com</a> までご連絡ください。</p>
+</section>
 
-  <section>
-    <h2 class="head">お子様の利用について</h2>
-    <p>本アプリは、13歳未満のお子様を対象として設計されたものではありません。お子様から個人情報を意図的に収集することはありません。</p>
-  </section>
-
-  <section>
-    <h2 class="head">本ポリシーの変更</h2>
-    <p>本ポリシーの内容を変更する場合があります。重要な変更を行う場合は、本ページの最終更新日を改めるとともに、アプリ内でお知らせします。</p>
-  </section>
-
-  <section>
-    <h2 class="head">お問い合わせ</h2>
-    <p>本ポリシーおよび本アプリの情報の取り扱いについてのご質問は、以下までご連絡ください。</p>
-    <p class="contact"><a href="mailto:snow0325@gmail.com">snow0325@gmail.com</a></p>
-  </section>
-
-  <!-- ================================================================
-       広告を導入する場合は、以下のコメントを外して掲載してください。
-       あわせて「収集しない情報」の段落から、広告識別子とアクセス解析に
-       関する記述を削除する必要があります。
-
-  <section>
-    <h2 class="head">広告について</h2>
-    <p>本アプリは、無料で提供するために広告を表示しています。広告の配信には ○○ を使用しており、広告の表示および効果測定のために、広告識別子（IDFA）などの情報が取得される場合があります。</p>
-    <p>広告のパーソナライズに使用される追跡は、iOS の「トラッキングを許可」の設定からいつでも停止できます。</p>
-    <p>広告配信事業者における情報の取り扱いについては、同社のプライバシーポリシーをご確認ください。</p>
-  </section>
-
-       ================================================================ -->
-
-  <div class="en">
-
-    <p class="eyebrow">English</p>
-
-    <section>
-      <h2 class="head">Privacy Policy</h2>
-      <p>“Ano Hikouki” (あの飛行機 - 上空を飛ぶ便の行き先がわかる, hereafter “the App”) does not require an account and does not collect personally identifiable information such as your name, email address, phone number, or date of birth. The App does not use advertising identifiers, behavioural tracking, or analytics tools.</p>
-    </section>
-
-    <section>
-      <h2 class="head">Location data</h2>
-      <p>The App uses your device location for one purpose only: to find aircraft flying above you. Location is accessed while the App is in use, never in the background.</p>
-      <p><strong>Your coordinates are transmitted to an external data provider</strong> in order to query which aircraft are near that position. Only the coordinates are sent; no information identifying you is included. Coordinates are not stored on your device or on any server, and no history is retained.</p>
-      <p>You can allow or deny location access at any time in iOS Settings. If access is denied, the App cannot display aircraft overhead.</p>
-    </section>
-
-    <section>
-      <h2 class="head">External data providers</h2>
-      <p>Aircraft data comes from adsb.lol (positions and tracks — the recipient of your coordinates), adsbdb (flight routes), OurAirports (airport locations), and Wikidata (Japanese airport names). Handling of information by those services is governed by their own policies. The App is independent and not affiliated with any of them. Maps are rendered using Apple MapKit.</p>
-    </section>
-
-    <section>
-      <h2 class="head">Children</h2>
-      <p>The App is not directed at children under 13, and does not knowingly collect personal information from them.</p>
-    </section>
-
-    <section>
-      <h2 class="head">Changes and contact</h2>
-      <p>This policy may be updated. Material changes will be reflected in the last-updated date above and announced in the App. Questions may be sent to <a href="mailto:snow0325@gmail.com">snow0325@gmail.com</a>.</p>
-    </section>
-
+<footer>
+  <div class="wrap foot-row">
+    <nav>
+      <a href="privacy.html">プライバシーポリシー</a>
+      <a href="mailto:snow0325@gmail.com">お問い合わせ</a>
+    </nav>
+    <span class="copy">© 2026 8ight Apps</span>
   </div>
+</footer>
 
-  <footer>
-    © 2026 8ight Apps
-  </footer>
-
-</main>
 </body>
 </html>
