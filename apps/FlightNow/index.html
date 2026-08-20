@@ -13,8 +13,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --sky-deep:#4A9BDD;
-    --sky-mid:#8FC7EC;
+    --sky-deep:#63AEE6;
+    --sky-mid:#A3D2F0;
     --sky-pale:#DCEDF8;
     --paper:#F4FAFD;
     --ink:#0F2A3F;
@@ -49,24 +49,22 @@
   .kicker{
     font-family:"IBM Plex Mono",ui-monospace,monospace;
     font-size:.7rem; letter-spacing:.14em; text-transform:uppercase;
-    color:#FFFFFF; opacity:.85; margin:0 0 1.6rem;
+    color:var(--ink); opacity:.6; margin:0 0 1.6rem;
   }
   h1{
     font-size:clamp(2.4rem,7vw,3.6rem);
     font-weight:900; line-height:1.3; margin:0 0 1.2rem;
-    color:#FFFFFF;
-    text-shadow:0 2px 12px rgba(10,50,80,.28);
+    color:var(--ink);
   }
   .tagline{
     font-size:1.1rem; max-width:30rem; margin:0 0 1.8rem;
-    color:#FFFFFF; opacity:.95;
-    text-shadow:0 1px 8px rgba(10,50,80,.25);
+    color:var(--ink); opacity:.82;
   }
   .status{
     display:inline-block;
     font-size:.85rem;
-    color:#FFFFFF; opacity:.85;
-    border:1px solid rgba(255,255,255,.55);
+    color:var(--ink); opacity:.72;
+    border:1px solid rgba(15,42,63,.3);
     border-radius:999px;
     padding:.4rem 1.1rem;
   }
