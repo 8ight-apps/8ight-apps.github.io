@@ -118,6 +118,15 @@
     color:var(--signal);
   }
   .flow li:first-child::before{content:"◉";}
+  .flow .aside{
+    margin:1.2rem 0 0;
+    padding-top:1.1rem;
+    border-top:1px solid var(--rule);
+    font-size:.88rem;
+    line-height:1.75;
+    color:var(--ink);
+    max-width:none;
+  }
 
   /* ---- sections ---- */
 
@@ -217,7 +226,7 @@
 
   <p class="meta">
     <span>制定日 2026-08-18</span>
-    <span>最終更新 2026-08-18</span>
+    <span>最終更新 2026-08-22</span>
     <span>提供 8ight Apps</span>
   </p>
 
@@ -229,6 +238,7 @@
       <li>返ってきた機体の情報を画面に表示する</li>
       <li>座標は保存されず、通信の完了とともに破棄される</li>
     </ol>
+    <p class="aside"><strong>あなたの現在地が送られるのは adsb.lol だけです。</strong>天気を表示するときに送るのは空港の座標であって、あなたの居場所ではありません。</p>
   </div>
 
   <section>
@@ -247,16 +257,40 @@
   </section>
 
   <section>
+    <h2 class="head">天気の表示について</h2>
+    <p>便の詳細を開いて「天気と見どころ」を表示したとき、出発地と到着地の天気を Apple の天気サービス（WeatherKit）から取得します。</p>
+    <p><strong>このとき送信するのは空港の緯度経度です。</strong>羽田やロサンゼルスといった、公開されている空港の座標であり、<strong>あなたの現在地は送信しません。</strong></p>
+    <p>送信が発生するのは「天気と見どころ」を開いたときだけです。開かなければ一度も送信されません。</p>
+    <p>取得した気温と天気は、空港コードと結びつけて端末内にのみ保存し、次に同じ空港を開いたときの再取得を避けています。この保存内容にあなたの位置や識別情報は含まれません。端末のキャッシュを削除するか、アプリを削除すれば消えます。</p>
+  </section>
+
+  <section>
+    <h2 class="head">端末内に保存するもの</h2>
+    <p>本アプリがあなたの端末内に保存するのは、次の3つだけです。いずれも外部へ送信しません。</p>
+    <ul class="plain">
+      <li>地図の向きの設定（北を上にするか、端末の向きに合わせるか）</li>
+      <li>アプリを起動した回数（初めて開いた方に App Store の評価をお願いしないために数えています）</li>
+      <li>空港ごとの気温と天気（上記のとおり、再取得を避けるため）</li>
+    </ul>
+  </section>
+
+  <section>
     <h2 class="head">外部のデータ提供元</h2>
-    <p>本アプリは、飛行機の情報を以下の外部サービスから取得しています。それぞれのサービスにおける情報の取り扱いは、各社の方針に従います。</p>
+    <p>本アプリは、飛行機と天気の情報を以下の外部サービスから取得しています。それぞれのサービスにおける情報の取り扱いは、各社の方針に従います。</p>
     <ul class="sources">
       <li>
-        <span class="role">位置・航跡データ／座標の送信先</span>
+        <span class="role">位置・航跡データ／あなたの座標の送信先</span>
         <a href="https://adsb.lol" rel="noopener">adsb.lol</a>
       </li>
       <li>
         <span class="role">路線データ</span>
         <a href="https://adsbdb.com" rel="noopener">adsbdb</a>
+        ／
+        <a href="https://adsb.lol" rel="noopener">adsb.lol</a>
+      </li>
+      <li>
+        <span class="role">天気／空港の座標の送信先</span>
+        <a href="https://weatherkit.apple.com/legal-attribution.html" rel="noopener">Apple Weather</a>
       </li>
       <li>
         <span class="role">空港の位置データ</span>
@@ -267,8 +301,9 @@
         <a href="https://www.wikidata.org" rel="noopener">Wikidata</a>
       </li>
     </ul>
+    <p>路線データの問い合わせで送信するのは便名（ANA123 のような識別子）のみで、位置情報は含みません。</p>
     <p>本アプリは、これらのデータ提供元とは一切関係のない独立したアプリです。</p>
-    <p>地図の表示には Apple の MapKit を使用しています。地図の利用に関する情報の取り扱いは、Apple のプライバシーポリシーに従います。</p>
+    <p>地図の表示には Apple の MapKit を使用しています。地図および天気の利用に関する情報の取り扱いは、<a href="https://www.apple.com/legal/privacy/" rel="noopener">Apple のプライバシーポリシー</a>に従います。</p>
   </section>
 
   <section>
@@ -318,8 +353,20 @@
     </section>
 
     <section>
+      <h2 class="head">Weather</h2>
+      <p>When you open “weather and highlights” on a flight card, the App fetches current conditions for the departure and arrival airports from Apple’s weather service (WeatherKit).</p>
+      <p><strong>What is sent is the coordinates of those airports</strong> — public locations such as Tokyo Haneda or Los Angeles. <strong>Your own location is never sent to Apple.</strong> Nothing is sent unless you open that section.</p>
+      <p>Retrieved temperatures and conditions are cached on your device, keyed by airport code, so the same airport is not fetched twice. The cache contains no location or identifying information about you, and is removed when you clear the app’s cache or delete the App.</p>
+    </section>
+
+    <section>
+      <h2 class="head">Stored on your device</h2>
+      <p>The App stores only three things locally, none of which are transmitted anywhere: your map orientation preference, a count of how many times the App has been opened (so that first-time users are not asked to rate it), and the airport weather cache described above.</p>
+    </section>
+
+    <section>
       <h2 class="head">External data providers</h2>
-      <p>Aircraft data comes from adsb.lol (positions and tracks — the recipient of your coordinates), adsbdb (flight routes), OurAirports (airport locations), and Wikidata (Japanese airport names). Handling of information by those services is governed by their own policies. The App is independent and not affiliated with any of them. Maps are rendered using Apple MapKit.</p>
+      <p>Aircraft data comes from adsb.lol (positions and tracks — the recipient of your coordinates), adsbdb and adsb.lol (flight routes), Apple Weather (conditions at departure and arrival airports — the recipient of those airport coordinates), OurAirports (airport locations), and Wikidata (Japanese airport names). Route lookups send only a flight identifier such as “ANA123” and contain no location data. Handling of information by those services is governed by their own policies. The App is independent and not affiliated with any of them. Maps are rendered using Apple MapKit; use of maps and weather is governed by <a href="https://www.apple.com/legal/privacy/" rel="noopener">Apple’s Privacy Policy</a>.</p>
     </section>
 
     <section>
