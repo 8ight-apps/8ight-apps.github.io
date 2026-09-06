@@ -226,7 +226,7 @@
 
   <p class="meta">
     <span>制定日 2026-08-18</span>
-    <span>最終更新 2026-08-22</span>
+    <span>最終更新 2026-09-05</span>
     <span>提供 8ight Apps</span>
   </p>
 
@@ -244,7 +244,26 @@
   <section>
     <h2 class="head">収集しない情報</h2>
     <p>本アプリはアカウント登録を必要としません。氏名、メールアドレス、電話番号、生年月日といった個人を特定できる情報を、一切収集しません。</p>
-    <p>広告識別子（IDFA）の取得、行動履歴の追跡、アクセス解析ツールの利用も行っていません。</p>
+    <p>広告識別子（IDFA）の取得、および他社のサービスやアプリを横断した行動履歴の追跡は行っていません。</p>
+    <p>アプリの利用状況の記録については、次の項目に記載しています。</p>
+  </section>
+
+  <section>
+    <h2 class="head">利用状況の記録について</h2>
+    <p>どの機能がどれだけ使われているかを把握し、改善に役立てるために、Google の <a href="https://firebase.google.com/support/privacy" rel="noopener">Firebase Analytics</a> を使用しています。</p>
+    <p>記録するのは、次のような<strong>アプリの操作そのもの</strong>です。</p>
+    <ul class="plain">
+      <li>アプリを起動したこと、および画面を表示したこと</li>
+      <li>機体を選んだこと</li>
+      <li>「天気と見どころ」を開いたこと</li>
+      <li>行き先を表示できたかどうか（できた／できなかった、の別のみ）</li>
+      <li>「範囲を広げて探す」を使ったこと</li>
+      <li>情報画面を開いたこと</li>
+    </ul>
+    <p><strong>あなたの現在地を記録することはありません。</strong>便名、機体の登録記号、空港コードも送信していません。これらは組み合わせると特定の一機の航跡を復元できてしまうため、意図的に除いています。</p>
+    <p>記録には、Firebase が端末ごとに割り当てる匿名の識別子が付きます。アカウントや広告識別子とは結びついておらず、これによってあなたが誰であるかが分かることはありません。アプリを削除すれば、この識別子も端末から消えます。</p>
+    <p>また、通信を受け取った Google 側で、IPアドレスから国・地域の単位のおおまかな所在地が推定されます。アプリが取得している緯度経度をこちらから送っているわけではありませんが、通信そのものから地域が分かるため、収集している情報として明示しています。</p>
+    <p>Firebase における情報の取り扱いは、<a href="https://firebase.google.com/support/privacy" rel="noopener">Firebase のプライバシーとセキュリティ</a>および <a href="https://policies.google.com/privacy" rel="noopener">Google のプライバシーポリシー</a>に従います。</p>
   </section>
 
   <section>
@@ -266,12 +285,14 @@
 
   <section>
     <h2 class="head">端末内に保存するもの</h2>
-    <p>本アプリがあなたの端末内に保存するのは、次の3つだけです。いずれも外部へ送信しません。</p>
+    <p>本アプリがあなたの端末内に保存するのは、次の4つだけです。</p>
     <ul class="plain">
       <li>地図の向きの設定（北を上にするか、端末の向きに合わせるか）</li>
       <li>アプリを起動した回数（初めて開いた方に App Store の評価をお願いしないために数えています）</li>
       <li>空港ごとの気温と天気（上記のとおり、再取得を避けるため）</li>
+      <li>Firebase が端末ごとに割り当てる匿名の識別子（上記「利用状況の記録について」のとおり）</li>
     </ul>
+    <p>このうち外部へ送信されるのは最後の1つだけで、他の3つはこの端末から出ません。</p>
   </section>
 
   <section>
@@ -300,10 +321,25 @@
         <span class="role">空港の日本語名</span>
         <a href="https://www.wikidata.org" rel="noopener">Wikidata</a>
       </li>
+      <li>
+        <span class="role">利用状況の記録先</span>
+        <a href="https://firebase.google.com/support/privacy" rel="noopener">Firebase Analytics（Google）</a>
+      </li>
     </ul>
     <p>路線データの問い合わせで送信するのは便名（ANA123 のような識別子）のみで、位置情報は含みません。</p>
     <p>本アプリは、これらのデータ提供元とは一切関係のない独立したアプリです。</p>
     <p>地図の表示には Apple の MapKit を使用しています。地図および天気の利用に関する情報の取り扱いは、<a href="https://www.apple.com/legal/privacy/" rel="noopener">Apple のプライバシーポリシー</a>に従います。</p>
+  </section>
+
+  <section>
+    <h2 class="head">国外への送信について</h2>
+    <p>上記の送信先はいずれも日本国外の事業者です。したがって、送信される情報は日本国外のサーバーで取り扱われます。</p>
+    <ul class="plain">
+      <li>あなたの座標の送信先である adsb.lol は、オランダに拠点を置く非営利のコミュニティです</li>
+      <li>利用状況の記録先である Google（Firebase Analytics）は、米国およびその他の国のサーバーで情報を取り扱います</li>
+      <li>天気の取得先である Apple は、米国およびその他の国のサーバーで情報を取り扱います</li>
+    </ul>
+    <p>各国における個人情報の保護に関する制度は日本と異なる場合があります。それぞれの事業者における取り扱いは、上記の各社の方針に従います。</p>
   </section>
 
   <section>
@@ -324,8 +360,8 @@
 
   <!-- ================================================================
        広告を導入する場合は、以下のコメントを外して掲載してください。
-       あわせて「収集しない情報」の段落から、広告識別子とアクセス解析に
-       関する記述を削除する必要があります。
+       あわせて「収集しない情報」の段落から、広告識別子に関する記述を
+       削除する必要があります。
 
   <section>
     <h2 class="head">広告について</h2>
@@ -342,7 +378,16 @@
 
     <section>
       <h2 class="head">Privacy Policy</h2>
-      <p>“Ano Hikouki” (あの飛行機 - 上空を飛ぶ便の行き先がわかる, hereafter “the App”) does not require an account and does not collect personally identifiable information such as your name, email address, phone number, or date of birth. The App does not use advertising identifiers, behavioural tracking, or analytics tools.</p>
+      <p>“Ano Hikouki” (あの飛行機 - 上空を飛ぶ便の行き先がわかる, hereafter “the App”) does not require an account and does not collect personally identifiable information such as your name, email address, phone number, or date of birth. The App does not use advertising identifiers and does not track you across other companies’ apps or websites. It does record how the App itself is used, as described below.</p>
+    </section>
+
+    <section>
+      <h2 class="head">Usage measurement</h2>
+      <p>To understand which features are used and how often, the App uses Google’s <a href="https://firebase.google.com/support/privacy" rel="noopener">Firebase Analytics</a>. What is recorded are actions within the App: opening the App and viewing screens, selecting an aircraft, opening “weather and highlights”, whether a destination could be shown (only whether, not which), using “search a wider area”, and opening the information screen.</p>
+      <p><strong>Your location is never recorded.</strong> Flight identifiers, aircraft registrations, and airport codes are not sent either — combined, those could reconstruct the track of a specific aircraft, so they are deliberately excluded.</p>
+      <p>Records carry an anonymous per-device identifier assigned by Firebase. It is not linked to any account or advertising identifier and does not reveal who you are. Deleting the App removes it from your device.</p>
+      <p>Google additionally infers an approximate location at the country or region level from the IP address of the connection. The App does not send the coordinates it obtains; the region is inferred from the connection itself, and is disclosed here for that reason.</p>
+      <p>Handling of information by Firebase is governed by <a href="https://firebase.google.com/support/privacy" rel="noopener">Firebase Privacy and Security</a> and <a href="https://policies.google.com/privacy" rel="noopener">Google’s Privacy Policy</a>.</p>
     </section>
 
     <section>
@@ -361,12 +406,17 @@
 
     <section>
       <h2 class="head">Stored on your device</h2>
-      <p>The App stores only three things locally, none of which are transmitted anywhere: your map orientation preference, a count of how many times the App has been opened (so that first-time users are not asked to rate it), and the airport weather cache described above.</p>
+      <p>The App stores only four things locally: your map orientation preference, a count of how many times the App has been opened (so that first-time users are not asked to rate it), the airport weather cache described above, and the anonymous per-device identifier assigned by Firebase. Only the last of these leaves your device; the other three never do.</p>
     </section>
 
     <section>
       <h2 class="head">External data providers</h2>
-      <p>Aircraft data comes from adsb.lol (positions and tracks — the recipient of your coordinates), adsbdb and adsb.lol (flight routes), Apple Weather (conditions at departure and arrival airports — the recipient of those airport coordinates), OurAirports (airport locations), and Wikidata (Japanese airport names). Route lookups send only a flight identifier such as “ANA123” and contain no location data. Handling of information by those services is governed by their own policies. The App is independent and not affiliated with any of them. Maps are rendered using Apple MapKit; use of maps and weather is governed by <a href="https://www.apple.com/legal/privacy/" rel="noopener">Apple’s Privacy Policy</a>.</p>
+      <p>Aircraft data comes from adsb.lol (positions and tracks — the recipient of your coordinates), adsbdb and adsb.lol (flight routes), Apple Weather (conditions at departure and arrival airports — the recipient of those airport coordinates), OurAirports (airport locations), and Wikidata (Japanese airport names), and Firebase Analytics from Google (usage measurement, as described above). Route lookups send only a flight identifier such as “ANA123” and contain no location data. Handling of information by those services is governed by their own policies. The App is independent and not affiliated with any of them. Maps are rendered using Apple MapKit; use of maps and weather is governed by <a href="https://www.apple.com/legal/privacy/" rel="noopener">Apple’s Privacy Policy</a>.</p>
+    </section>
+
+    <section>
+      <h2 class="head">Transfers outside Japan</h2>
+      <p>All of the recipients above are based outside Japan, so the information sent to them is handled on servers outside Japan. adsb.lol, the recipient of your coordinates, is a non-profit community based in the Netherlands. Google (Firebase Analytics), the recipient of usage records, and Apple, the source of weather data, handle information on servers in the United States and other countries. Data protection regimes in those countries may differ from Japan’s. Handling by each provider is governed by its own policy, linked above.</p>
     </section>
 
     <section>
